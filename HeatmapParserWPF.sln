@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatmapParserWPF", "HeatmapParserWPF\HeatmapParserWPF.csproj", "{3B66E44A-CA22-4FAE-8C38-DE79262D0E74}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B66E44A-CA22-4FAE-8C38-DE79262D0E74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B66E44A-CA22-4FAE-8C38-DE79262D0E74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B66E44A-CA22-4FAE-8C38-DE79262D0E74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B66E44A-CA22-4FAE-8C38-DE79262D0E74}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E79D0C06-C9A6-4E9F-BC8E-36459BBEAAC3}
+	EndGlobalSection
+EndGlobal

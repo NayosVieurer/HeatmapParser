@@ -1,0 +1,14 @@
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\bin\Release\HeatmapParserWPF.exe.config
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\bin\Release\HeatmapParserWPF.exe
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\bin\Release\HeatmapParserWPF.pdb
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\MainWindow.g.cs
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\App.g.cs
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\HeatmapParserWPF_MarkupCompile.cache
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\HeatmapParserWPF_MarkupCompile.lref
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\MainWindow.baml
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\HeatmapParserWPF.g.resources
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\HeatmapParserWPF.Properties.Resources.resources
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\HeatmapParserWPF.csproj.GenerateResource.cache
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\HeatmapParserWPF.csproj.CoreCompileInputs.cache
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\HeatmapParserWPF.exe
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Release\HeatmapParserWPF.pdb
