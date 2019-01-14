@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-F:\Documents\HeatmapParser\HeatmapParserWPF\obj\Debug\
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\
 HeatmapParserWPF
 none
 false
 DEBUG;TRACE
-F:\Documents\HeatmapParser\HeatmapParserWPF\App.xaml
-11151548125
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\App.xaml
+22069348982
 
-6923038709
+61633078624
 151984215308
-MainWindow.xaml;
+MainWindow.xaml;PathInput.xaml;
 
 False
 

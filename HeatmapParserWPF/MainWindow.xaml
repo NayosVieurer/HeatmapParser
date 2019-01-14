@@ -4,14 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prop="clr-namespace:HeatmapParserWPF.Properties"
+        xmlns:self="clr-namespace:HeatmapParserWPF"
         Title="MainWindow"
+        ContentRendered="Window_ContentRendered"
         Height="{Binding Source={x:Static prop:Settings.Default}, Path=Height, Mode=TwoWay}"
         Width="{Binding Source={x:Static prop:Settings.Default}, Path=Width, Mode=TwoWay}"
         Top="{Binding Source={x:Static prop:Settings.Default}, Path=Top, Mode=TwoWay}"
         Left="{Binding Source={x:Static prop:Settings.Default}, Path=Left, Mode=TwoWay}"
         Closing="Window_Closing"
-        StateChanged="Window_StateChanged"
-        >
+        StateChanged="Window_StateChanged">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="self:CustomCommands.Exit" CanExecute="ExitCommand_CanExecute" Executed="ExitCommand_Executed"/>
+    </Window.CommandBindings>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -25,12 +31,9 @@
 
         <DockPanel Grid.ColumnSpan="3">
             <Menu DockPanel.Dock="Top">
-                <MenuItem Header="File">
-                    <MenuItem Header="New"/>
-                </MenuItem>
-                <MenuItem Header="Edit">
-                    <MenuItem Header="Options"/>
-                </MenuItem>
+                <MenuItem Header="_File">
+                    <MenuItem Command="self:CustomCommands.Exit"/>
+                </MenuItem> 
             </Menu>
         </DockPanel>
     </Grid>

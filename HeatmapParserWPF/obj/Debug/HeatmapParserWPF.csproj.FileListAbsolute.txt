@@ -28,3 +28,5 @@ F:\Documents\HeatmapParser\HeatmapParserWPF\obj\Debug\HeatmapParserWPF.csproj.Ge
 F:\Documents\HeatmapParser\HeatmapParserWPF\obj\Debug\HeatmapParserWPF.csproj.CoreCompileInputs.cache
 F:\Documents\HeatmapParser\HeatmapParserWPF\obj\Debug\HeatmapParserWPF.exe
 F:\Documents\HeatmapParser\HeatmapParserWPF\obj\Debug\HeatmapParserWPF.pdb
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\PathInput.g.cs
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\PathInput.baml
