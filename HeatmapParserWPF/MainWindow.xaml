@@ -3,18 +3,35 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HeatmapParserWPF"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:prop="clr-namespace:HeatmapParserWPF.Properties"
+        Title="MainWindow"
+        Height="{Binding Source={x:Static prop:Settings.Default}, Path=Height, Mode=TwoWay}"
+        Width="{Binding Source={x:Static prop:Settings.Default}, Path=Width, Mode=TwoWay}"
+        Top="{Binding Source={x:Static prop:Settings.Default}, Path=Top, Mode=TwoWay}"
+        Left="{Binding Source={x:Static prop:Settings.Default}, Path=Left, Mode=TwoWay}"
+        Closing="Window_Closing"
+        StateChanged="Window_StateChanged"
+        >
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="HeatmapDisplay" HorizontalAlignment="Left" Height="100" Margin="20,14,0,0" VerticalAlignment="Top" Width="100"/>
-        <ComboBox x:Name="FolderSelection" HorizontalAlignment="Left" Margin="20,161,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="DaySelection" HorizontalAlignment="Left" Margin="20,133,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="FolderSelection1" Content="Button" HorizontalAlignment="Left" Margin="357,307,0,0" VerticalAlignment="Top" Width="75"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <DockPanel Grid.ColumnSpan="3">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="File">
+                    <MenuItem Header="New"/>
+                </MenuItem>
+                <MenuItem Header="Edit">
+                    <MenuItem Header="Options"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
     </Grid>
 </Window>

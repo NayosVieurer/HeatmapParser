@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#pragma warning disable MissingOptionsRule // Missing Or Corrupted Options
 using System.Windows;
-using System.Windows.Controls;
-using System.Drawing;
-using System.Windows.Interop;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Forms;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.ComponentModel;
+using System;
 
 public struct HeatPoint
 {
@@ -36,30 +23,35 @@ namespace HeatmapParserWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        private List<HeatPoint> list;
-   
+        bool isMaximised;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            isMaximised = Properties.Settings.Default.Maximized;
+            this.WindowState = isMaximised ? WindowState.Maximized : WindowState.Normal;
+
             
-            for(int i = 0; i < 4; i++)
-            {
-                FolderSelection.Items.Add(i.ToString()); 
-            }
-
-            FolderSelection1.Click += SelectFolder;
-        }     
-        
-        public void SelectFolder(object sender, RoutedEventArgs e)
-        {
-            var dialog = new FolderBrowserDialog();
-
-           DialogResult result =  dialog.ShowDialog();
-
-            Console.WriteLine(dialog.SelectedPath.ToString());
         }
-    
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Properties.Settings.Default.Maximized = isMaximised;
+
+            
+
+            Properties.Settings.Default.Save();
+        }
+
+        private void Window_StateChanged(object sender, System.EventArgs e)
+        {
+            if(this.WindowState != WindowState.Minimized)
+            {
+                isMaximised = !isMaximised;
+            }
+        }
     }
 }
+
+#pragma warning restore MissingOptionsRule // Missing Or Corrupted Options
