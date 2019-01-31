@@ -17,15 +17,15 @@ namespace HeatmapParserWPF
     /// <summary>
     /// Interaction logic for PathInput.xaml
     /// </summary>
-    public partial class InputDialog : Window
+    public partial class PathInput : Window
     {
-        public string answer { get { return inputAnswer.Text; } }
+       public string answer { get { return inputAnswer.pathTxtBox.Text; } }
 
-        public InputDialog(string question, string defaultAnswer = "")
+        public PathInput(string question, string defaultAnswer = "")
         {
             InitializeComponent();
             dialQuestion.Content = question;
-            inputAnswer.Text = defaultAnswer;
+            inputAnswer.pathTxtBox.Text = defaultAnswer;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

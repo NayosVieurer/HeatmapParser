@@ -17,5 +17,8 @@
     <Setting Name="Maximized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="Path" Type="System.String" Scope="User">
+      <Value Profile="(Default)">X:\J002\01_PERSO\BLACK_HIVE\Playtest_Datas\Heatmaps</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
