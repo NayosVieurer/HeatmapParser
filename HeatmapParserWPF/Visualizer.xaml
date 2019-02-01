@@ -2,15 +2,40 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:HeatmapParserWPF"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:self="clr-namespace:HeatmapParserWPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
+    
+    
     <Grid>
-        <StackPanel>
-            <Button></Button>
-            <Button></Button>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="right" Height="50" Margin="0,10,200,0" VerticalAlignment="Top" Width="200">
+            <Button Content="Creatures deaths" Margin="0, 0, 10, 0" Width="95"/>
+            <Button Content="Soldier steps" HorizontalAlignment="Right" Width="95"/>
         </StackPanel>
-        <ComboBox Name="playtests"></ComboBox>
+
+        <StackPanel Orientation="Vertical" Width="200" Height="125" Grid.Column="1" Grid.Row="1">
+            <Label Content="Game" HorizontalAlignment="Center"/>
+            <ComboBox Name="gameSelection" Grid.Column="1" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" />
+            <Label Content="Floor" HorizontalAlignment="Center"/>
+            <ComboBox Name="floorSelection" Grid.Column="1" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0, 5, 0, 0"/>
+        </StackPanel>
+        
+        <Button Background="Transparent" Command="self:CustomCommands.CloseVisualizer" BorderThickness="0, 0, 0, 0" Content="X" Grid.Column="2" HorizontalAlignment="Right" Margin="0,10,50,0" VerticalAlignment="Top"/>
+
+        <ScrollViewer Margin="0, 0, 0, 75" DockPanel.Dock="Bottom" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Image Name="Display"  MinHeight="500" MinWidth="500" Source="Resources/Soldier.png" MaxHeight="1500" MaxWidth="1500"></Image>
+        </ScrollViewer>
+
     </Grid>
 </UserControl>
