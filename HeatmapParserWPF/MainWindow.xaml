@@ -11,16 +11,20 @@
         Width="{Binding Source={x:Static prop:Settings.Default}, Path=Width, Mode=TwoWay}"
         Top="{Binding Source={x:Static prop:Settings.Default}, Path=Top, Mode=TwoWay}"
         Left="{Binding Source={x:Static prop:Settings.Default}, Path=Left, Mode=TwoWay}"
+        MinHeight="500"
+        MinWidth="750"
         Closing="Window_Closing"
-        StateChanged="Window_StateChanged">
+        StateChanged="Window_StateChanged"
+        SizeChanged="Window_SizeChanged">
 
     <Window.CommandBindings>
         <CommandBinding Command="self:CustomCommands.Exit" CanExecute="ExitCommand_CanExecute" Executed="ExitCommand_Executed"/>
+        <CommandBinding Command="self:CustomCommands.CloseVisualizer" CanExecute="CloseVisualizer_CanExecute" Executed="CloseVisualizer_Executed"/>
     </Window.CommandBindings>
 
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Grid Name="mainGrid">
+    <ScrollViewer Name="mainMenu" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid Name="mainGrid" HorizontalAlignment="Center">
 
             <Grid.ColumnDefinitions>
             </Grid.ColumnDefinitions>
@@ -28,4 +32,9 @@
             </Grid.RowDefinitions>
         </Grid>
     </ScrollViewer>
+
+    <!--<self:Visualizer>
+        
+    </self:Visualizer>-->
+    
 </Window>
