@@ -33,3 +33,5 @@ C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\Heat
 C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\HeatmapParserWPF.exe
 C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\HeatmapParserWPF.pdb
 C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\HeatmapParserWPF.csprojAssemblyReference.cache
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\Visualizer.g.cs
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\Visualizer.baml
