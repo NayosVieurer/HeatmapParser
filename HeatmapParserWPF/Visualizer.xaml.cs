@@ -20,7 +20,7 @@ namespace HeatmapParserWPF
     /// </summary>
     public partial class Visualizer : UserControl
     {
-        string gamePath;
+        string dayPath;
 
         public Visualizer()
         {
@@ -29,7 +29,11 @@ namespace HeatmapParserWPF
 
         public Visualizer(string path)
         {
-            gamePath = path;
+            InitializeComponent();
+
+            dayPath = path;
+
+            Console.WriteLine(dayPath);
         }
     }
 }
