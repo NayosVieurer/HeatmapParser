@@ -20,5 +20,8 @@
     <Setting Name="Path" Type="System.String" Scope="User">
       <Value Profile="(Default)">X:\J002\01_PERSO\BLACK_HIVE\Playtest_Datas\Heatmaps</Value>
     </Setting>
+    <Setting Name="DatasPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">X:\J002\01_PERSO\BLACK_HIVE\Playtest_Datas\Heatmaps\GeneralsDatas</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

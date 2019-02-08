@@ -153,7 +153,7 @@ namespace HeatmapParserWPF
             {
                 temp = new Button();
                 tempText = new TextBlock();
-                tempText.Text = s.Substring(s.LastIndexOf('\\') + 1);
+                tempText.Text = Path.GetFileName(s);
 
                 temp.Content = tempText;
 

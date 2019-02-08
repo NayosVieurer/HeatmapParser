@@ -94,5 +94,17 @@ namespace HeatmapParserWPF.Properties {
                 this["Path"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("X:\\J002\\01_PERSO\\BLACK_HIVE\\Playtest_Datas\\Heatmaps\\GeneralsDatas")]
+        public string DatasPath {
+            get {
+                return ((string)(this["DatasPath"]));
+            }
+            set {
+                this["DatasPath"] = value;
+            }
+        }
     }
 }
