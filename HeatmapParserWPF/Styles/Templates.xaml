@@ -1,0 +1,79 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:HeatmapParserWPF">
+
+ <!-- Buttons templates -->
+    <ControlTemplate x:Key="CustomButtonTemplate" TargetType="{x:Type Button}">
+        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsDefaulted" Value="True">
+                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" TargetName="border" Value="#FFBEE6FD"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF3C7FB1"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" TargetName="border" Value="#FFC4E5F6"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF2C628B"/>
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="#FF245A83"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" TargetName="border" Value="#9FA3A3"/>
+                <Setter Property="BorderBrush" TargetName="border" Value="#FFADB2B5"/>
+                <Setter Property="Foreground" Value="#FF838383"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="ExpanderButton" TargetType="{x:Type ToggleButton}">
+        <Border x:Name="ExpanderButtonBorder" Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0, 0, 0, 0" Padding="{TemplateBinding Padding}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Ellipse Name="Circle" Grid.Column="0" Stroke="#cccccc" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Path x:Name="Icon" Data="M2.5,10L7.5,5 2.5,0" Stroke="#cccccc" Width="10" Height="10" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+            </Grid>
+        </Border>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Data" TargetName="Icon" Value="M7.5,10L2.5,5 7.5,0"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Stroke" Value="White" TargetName="Circle"/>
+                <Setter Property="Stroke" Value="White" TargetName="Icon"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Stroke" Value="DarkGray" TargetName="Circle"/>
+
+                <Setter Property="Stroke" Value="DarkGray" TargetName="Icon"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Expanders templates -->
+    <ControlTemplate x:Key="CustomExpanderTemplate" TargetType="{x:Type Expander}">
+        <DockPanel>
+            <ToggleButton x:Name="ExpanderButton" DockPanel.Dock="Left" Template="{StaticResource ExpanderButton}" Content="{TemplateBinding Header}" IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"/>
+            <ContentPresenter x:Name="ExpanderContent" Visibility="Collapsed" DockPanel.Dock="Right"/>
+        </DockPanel>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="True">
+                <Setter TargetName="ExpanderContent" Property="Visibility" Value="Visible"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+</ResourceDictionary>
