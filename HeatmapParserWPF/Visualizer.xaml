@@ -5,36 +5,84 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:self="clr-namespace:HeatmapParserWPF"
              mc:Ignorable="d" >
-    
-    
-    
+
+    <UserControl.Resources>
+        <ResourceDictionary Source="Styles/Templates.xaml"/>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="self:CustomCommands.Increase" CanExecute="TraceControls_CanExecute" Executed="Increase_Executed"/>
+        <CommandBinding Command="self:CustomCommands.Decrease" CanExecute="TraceControls_CanExecute" Executed="Decrease_Executed"/>
+    </UserControl.CommandBindings>
+
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>
-            <RowDefinition/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="right" Height="50" Margin="0,10,200,0" VerticalAlignment="Top" Width="200">
-            <Button Content="Creatures deaths" Name="Creatures" Click="Creatures_Click" Margin="0, 0, 10, 0" Width="95"/>
-            <Button Content="Soldier steps" Name="Soldier" Click="Soldier_Click" HorizontalAlignment="Right" Width="95"/>
+        <Border  BorderThickness="0, 0, 0, 3" BorderBrush="#181818"/>
+
+        <Border Grid.Column="1" Grid.RowSpan="3" BorderThickness="3, 0, 0, 0" BorderBrush="#181818"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="50" Margin="0,10,0,0" VerticalAlignment="Top" Width="380">
+            <Button Content="Creatures deaths" Background="#282828" Foreground="#F8F8F8" Name="Creatures" Click="Maps_Click" Margin="0, 0, 10, 0" Width="120" Template="{DynamicResource CustomButtonTemplate}"/>
+            <Button Content="Soldier hits" Background="#282828" Foreground="#F8F8F8" Name="SoldierHits" Click="Maps_Click" Margin="0, 0, 10, 0" Width="120" Template="{DynamicResource CustomButtonTemplate}"/>
+            <Button Content="Soldier steps" Background="#282828" Foreground="#F8F8F8"  Name="SoldierSteps" Click="SoldierSteps_Click" HorizontalAlignment="Right" Width="120" Template="{DynamicResource CustomButtonTemplate}"/>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical" Width="200" Height="125" Grid.Column="1" Grid.Row="1">
-            <Label Content="Game" HorizontalAlignment="Center"/>
-            <ComboBox Name="gameSelection" SelectionChanged="GameSelection_SelectionChanged" Grid.Column="1" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" />
-            <Label Content="Floor" HorizontalAlignment="Center"/>
-            <ComboBox Name="floorSelection" SelectionChanged="FloorSelection_SelectionChanged" Grid.Column="1" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0, 5, 0, 0"/>
-        </StackPanel>
-        
-        <Button Background="Transparent" Command="self:CustomCommands.CloseVisualizer" BorderThickness="0, 0, 0, 0" Content="X" Grid.Column="2" HorizontalAlignment="Right" Margin="0,10,50,0" VerticalAlignment="Top"/>
+        <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Height="175" Orientation="Vertical" Visibility="Visible">
+            <Label Foreground="White" Content="Game" HorizontalAlignment="Center"/>
+            <ComboBox Name="gameSelection" SelectionChanged="GameSelection_SelectionChanged" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" />
 
-        <ScrollViewer Margin="0, 0, 0, 75" Grid.Row="1">
-            <Image Name="Display"></Image>
+            <Canvas>
+                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="CreatureControls" Orientation="Vertical" Visibility="Visible">
+                    <Label Foreground="White" Content="Floor" HorizontalAlignment="Center"/>
+                    <ComboBox Name="floorSelection" SelectionChanged="FloorSelection_SelectionChanged" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="soldierControls" Orientation="Vertical" Visibility="Hidden">
+
+                    <Label Content="Timeline :" HorizontalAlignment="Center" Foreground="White"/>
+                    <Slider ValueChanged="TraceDepthSlider_ValueChanged" Maximum="100" Minimum="0" Name="traceDepthSlider" IsSnapToTickEnabled="True" TickFrequency="1"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" Command="self:CustomCommands.Decrease">
+                            <Button.Content>
+                                <Path VerticalAlignment="Center" HorizontalAlignment="Right" Stroke="DarkGray" StrokeThickness="2" Data="M20, 0L -0,7.5 20, 15 "/>
+                            </Button.Content>
+                        </Button>
+                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" Command="self:CustomCommands.Increase">
+                            <Button.Content>
+                                <Path VerticalAlignment="Center" HorizontalAlignment="Right" Stroke="DarkGray" StrokeThickness="2" Data="M0, 0L 20,7.5 0, 15 "/>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Canvas>
+        </StackPanel>
+
+        <StackPanel Name="stats" Visibility="Hidden" Orientation="Vertical" Grid.Column="1" Grid.Row="2">
+            <Label FontSize="24" FontWeight="Bold" Name="amountLabel" Foreground="White" Content="Total deaths on this floor: " HorizontalAlignment="Center"/>
+            <TextBlock FontSize="24" Name="amount" Foreground="White" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.RowSpan="2"  Background="#e9eef1" Margin="0, 0, 0, 0" Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Rectangle Name="background" Fill="#656568"/>
+                <Image Name="Display" Height="900" Width="900" Source="Resources/placeholder.png"/>
+                <Image Name="Mask" Height="900" Width="900"/>
+            </Grid>
         </ScrollViewer>
-
     </Grid>
 </UserControl>
