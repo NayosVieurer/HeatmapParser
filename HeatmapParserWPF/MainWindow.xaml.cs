@@ -3,7 +3,10 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls.Primitives;
+using System.Globalization;
 using System.ComponentModel;
 using System.IO;
 using System;
@@ -20,10 +23,6 @@ namespace HeatmapParserWPF
         bool isMaximised;
 
         string path = "";
-
-        int numberPerRow = 10;
-
-        Visualizer currentVisualizer;
         
         public MainWindow()
         {
@@ -34,11 +33,6 @@ namespace HeatmapParserWPF
            path = Properties.Settings.Default.Path;
 
             this.WindowState = isMaximised ? WindowState.Maximized : WindowState.Normal;
-        }
-
-        private void test_Click(object sender, RoutedEventArgs e)
-        {
-            
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -61,21 +55,6 @@ namespace HeatmapParserWPF
 
         }
 
-        private void ExitCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-
-            if(mainMenu.IsEnabled)
-            {
-                e.CanExecute = true;
-            }
-            //e.CanExecute = true;
-        }
-
-        private void ExitCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
         private void Window_ContentRendered(object sender, EventArgs e)
         {
 
@@ -95,47 +74,31 @@ namespace HeatmapParserWPF
                     }
                 } while (!Directory.Exists(path));
             }
-
             GenerateLayout();
-          
         }
 
         private void playtest_click(object sender, RoutedEventArgs e)
         {
             Button clicked = (Button)sender;
 
-            TextBlock clickedContent = (TextBlock)clicked.Content;
+            Console.WriteLine(clicked.Name.GetType());
 
-            string fullPath = path + '\\' + clickedContent.Text;
+            //TextBlock clickedContent = (TextBlock)clicked.Content;        
 
-            //foreach (string s in Directory.GetDirectories(fullPath))
-            //{
-            //    Console.WriteLine(s);
-            //}
-
-            currentVisualizer = new Visualizer(fullPath);
-
-            currentVisualizer.Width = ActualWidth;
-
-            currentVisualizer.Height = ActualHeight;
-
-            //mainMenu.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-
-            //mainMenu.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-
-            //currentVisualizer.Margin = new Thickness(15, 15, 15, 15);
-
-            foreach (UIElement item in mainGrid.Children)
+            foreach(Button b in elementList.Children)
             {
-                item.IsEnabled = false;
-                item.Visibility = Visibility.Hidden;
+                if(!b.IsEnabled && b != clicked)
+                {
+                    b.IsEnabled = true;
+                }
             }
 
-            Grid.SetRowSpan(currentVisualizer, mainGrid.RowDefinitions.Count);
+            clicked.IsEnabled = false;
 
-            Grid.SetColumnSpan(currentVisualizer, mainGrid.ColumnDefinitions.Count);
+            test.Init(path, clicked.Tag.ToString());
 
-            mainGrid.Children.Add(currentVisualizer);
+            Expand.IsExpanded = false;
+
         }
 
         private void GenerateLayout()
@@ -143,84 +106,79 @@ namespace HeatmapParserWPF
             Button temp;
             TextBlock tempText;
 
-            ColumnDefinition tempColumn;
-            RowDefinition tempRow;
+            string directoryName;
 
-            int elementColumn = 0;
-            int elementRow = 0;
+            double timestamp;
 
-            foreach (string s in Directory.GetDirectories(path, "Playtests*"))
+            DateTime date;
+
+            foreach (string s in Directory.GetDirectories(path))
             {
+                directoryName = Path.GetFileName(s);
+
+                if(directoryName == "GeneralsDatas")
+                {
+                    continue;
+                }
+
+                Console.WriteLine(directoryName);
+
                 temp = new Button();
                 tempText = new TextBlock();
+
                 tempText.Text = Path.GetFileName(s);
 
-                temp.Content = tempText;
-
-                if (mainGrid.ColumnDefinitions.Count <= elementColumn)
+                if (directoryName.Contains("Playtest"))
                 {
-                    tempColumn = new ColumnDefinition();
-                    tempColumn.Width = new GridLength();
-                    mainGrid.ColumnDefinitions.Add(tempColumn);
+                    //temp.Content = tempText;
+
+                    date = File.GetCreationTime(directoryName);
+
+                    temp.Content = date.DayOfWeek.ToString() + ", " + date.ToString("M", new CultureInfo("en-us"));
+  
                 }
 
-                Grid.SetColumn(temp, elementColumn);
-
-                if (mainGrid.RowDefinitions.Count <= elementRow)
+                else
                 {
-                    tempRow = new RowDefinition();
-                    tempRow.Height = new GridLength();
-                    mainGrid.RowDefinitions.Add(tempRow);
-                }
+                    timestamp = double.Parse(directoryName);
 
-                Grid.SetRow(temp, elementRow);
+                    date = ExtensionMethods.UnixTimeStampToDateTime(timestamp);              
+
+                    temp.Content = date.DayOfWeek.ToString() + ", " + date.ToString("M", new CultureInfo("en-us"));
+                    temp.Tag = directoryName;
+                }
 
                 temp.HorizontalAlignment = HorizontalAlignment.Center;
                 temp.VerticalAlignment = VerticalAlignment.Center;
 
+                temp.Background = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+
+                temp.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+
+                temp.Margin = new Thickness(0, 3, 0, 3);
+
                 temp.Height = 50;
                 temp.Width = 140;
 
-                temp.Margin = new Thickness(15, 15, 15, 15);
-
-                if (elementColumn >= numberPerRow)
-                {
-                    elementColumn = 0;
-                    elementRow++;
-                }
-                else
-                {
-                    elementColumn++;
-                }
-                mainGrid.Children.Add(temp);
+                elementList.Children.Add(temp);
 
                 temp.Click += playtest_click;
             }
         }
 
-        private void CloseVisualizer_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void Test_Expanded(object sender, RoutedEventArgs e)
         {
-            if(currentVisualizer != null)
-            {
-                e.CanExecute = true;
-            }
+            Grid.SetColumnSpan(test, 1);
+            Grid.SetColumn(test, 1);
         }
 
-        private void CloseVisualizer_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void Test_Collapsed(object sender, RoutedEventArgs e)
         {
-
-            mainGrid.Children.Remove(currentVisualizer);
-
-            currentVisualizer = null;
-
-            foreach(UIElement item in mainGrid.Children)
-            {
-                item.IsEnabled = true;
-                item.Visibility = Visibility.Visible;
-            }
+            Grid.SetColumnSpan(test, 2);
+            Grid.SetColumn(test, 0);
         }
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
 
         }

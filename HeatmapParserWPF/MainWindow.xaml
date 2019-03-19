@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prop="clr-namespace:HeatmapParserWPF.Properties"
         xmlns:self="clr-namespace:HeatmapParserWPF"
-        Title="MainWindow"
+        Title="H.I.V.E. Reports"
         ContentRendered="Window_ContentRendered"
         Height="{Binding Source={x:Static prop:Settings.Default}, Path=Height, Mode=TwoWay}"
         Width="{Binding Source={x:Static prop:Settings.Default}, Path=Width, Mode=TwoWay}"
@@ -15,26 +15,41 @@
         MinWidth="750"
         Closing="Window_Closing"
         StateChanged="Window_StateChanged"
-        SizeChanged="Window_SizeChanged">
+        >
+    <Window.Resources>
+        <ResourceDictionary Source="Styles/Templates.xaml"/>
+    </Window.Resources>
+    <Window.Background>
+        <SolidColorBrush Color="#484848"/>
+    </Window.Background>
 
     <Window.CommandBindings>
-        <CommandBinding Command="self:CustomCommands.Exit" CanExecute="ExitCommand_CanExecute" Executed="ExitCommand_Executed"/>
-        <CommandBinding Command="self:CustomCommands.CloseVisualizer" CanExecute="CloseVisualizer_CanExecute" Executed="CloseVisualizer_Executed"/>
     </Window.CommandBindings>
 
+    <Grid Name="mainGrid" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+        </Grid.RowDefinitions>
 
-    <ScrollViewer Name="mainMenu" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Grid Name="mainGrid" HorizontalAlignment="Center">
+        <self:Visualizer x:Name="test" Grid.ColumnSpan="2"/>
 
-            <Grid.ColumnDefinitions>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-            </Grid.RowDefinitions>
-        </Grid>
-    </ScrollViewer>
-
-    <!--<self:Visualizer>
-        
-    </self:Visualizer>-->
-    
+        <Expander Collapsed="Test_Collapsed" Margin="5, 5, 0, 0" Expanded="Test_Expanded" Visibility="Visible"  Name="Expand" Template="{DynamicResource CustomExpanderTemplate}">
+            
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical" Name="elementList" Opacity="0.75">
+                    <StackPanel.Background>
+                        <LinearGradientBrush>
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStop Color="Gray" Offset="0"/>
+                                <GradientStop Color="LightGray" Offset="1.0"/>
+                            </LinearGradientBrush.GradientStops>
+                        </LinearGradientBrush>
+                    </StackPanel.Background>
+                </StackPanel>
+            </ScrollViewer>
+        </Expander>
+    </Grid>
 </Window>
