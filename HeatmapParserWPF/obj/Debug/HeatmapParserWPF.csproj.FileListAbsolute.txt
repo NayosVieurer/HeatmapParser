@@ -35,3 +35,4 @@ C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\Heat
 C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\HeatmapParserWPF.csprojAssemblyReference.cache
 C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\Visualizer.g.cs
 C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\Visualizer.baml
+C:\Users\m.minardi\source\repos\HeatmapParserWPF\HeatmapParserWPF\obj\Debug\Styles\Templates.baml
