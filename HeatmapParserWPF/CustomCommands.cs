@@ -21,14 +21,36 @@ namespace HeatmapParserWPF
         );
 
         public static readonly RoutedUICommand CloseVisualizer = new RoutedUICommand
-            (
-                "X",
-                "CloseVisualizer",
-                typeof(CustomCommands),
-                new InputGestureCollection()
-                {
-                    new KeyGesture(Key.Escape)
-                }
-            );
+        (
+            "X",
+            "CloseVisualizer",
+            typeof(CustomCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.Escape)
+            }
+        );
+
+        public static readonly RoutedUICommand Increase = new RoutedUICommand
+        (
+            "",
+            "Increase",
+            typeof(CustomCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.Right)
+            }
+        );
+
+        public static readonly RoutedUICommand Decrease = new RoutedUICommand
+        (
+            "",
+            "Decrease",
+            typeof(CustomCommands),
+            new InputGestureCollection()
+            {
+                new KeyGesture(Key.Left)
+            }
+        );
     }
 }
