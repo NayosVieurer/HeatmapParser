@@ -10,202 +10,88 @@ using System.Threading.Tasks;
 
 namespace HeatmapParserWPF
 {
-    public struct Vector
-    {
-        public float X;
-        public float Y;
-        public float Z;
 
-        public Vector(float X = 0, float Y = 0, float Z = 0)
-        {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
-        }
 
-        public Vector Reduce(float B)
-        {
-            Vector returnVector = new Vector();
-
-            returnVector.X = X - B;
-
-            returnVector.Y = Y - B;
-
-            returnVector.Z = Z - B;
-
-            return returnVector;
-        }
-
-        public static Vector operator-(Vector A, Vector B)
-        {
-            Vector returnVector = new Vector();
-
-            returnVector.X = A.X - B.X;
-
-            returnVector.Y = A.Y - B.Y;
-
-            returnVector.Z = A.Z - B.Z;
-
-            return returnVector;
-        }
-
-        public static Vector operator/(Vector A, float B)
-        {
-            Vector returnVector = new Vector();
-
-            returnVector.X = A.X / B;
-
-            returnVector.Y = A.Y / B;
-
-            returnVector.Z = A.Z / B;
-
-            return returnVector;
-        }
-
-        public static Vector operator *(Vector A, int B)
-        {
-            Vector returnVector = new Vector();
-
-            returnVector.X = A.X * B;
-
-            returnVector.Y = A.Y * B;
-
-            returnVector.Z = A.Z * B;
-
-            return returnVector;
-        }
-    };
-
-    public struct HeatPoint
-    {
-        public float X;
-        public float Y;
-
-        public byte intensity;
-
-        public HeatPoint(float iX, float iY, byte bIntensity)
-        {
-            X = iX;
-            Y = iY;
-            intensity = bIntensity;
-        }
-    }
 
 
     class Heatmap
     {
-        List<HeatPoint> heatPoints = new List<HeatPoint>();
+        public List<ImagePoint> heatPoints { get; set; }
 
-        Vector worldReference;
+        Color baseColor;
 
-        float worldSize;
+        public string floor { get; set; }
+
+        public string game { get; set; }
+
+        public MapType playerType { get; set; }
 
         public Bitmap referenceImage { get; set; }
 
         public Bitmap mask { get; set; }
 
-        public Bitmap result;
-
         float radius = 20;
 
-        public Heatmap(string path, string floor)
+        public Heatmap(string floor, string game, MapType playerType)
         {
-            referenceImage = new Bitmap(Properties.Settings.Default.DatasPath + "\\" + floor + ".png");
 
-            mask = new Bitmap(referenceImage.Width, referenceImage.Height);
+            this.floor = floor;
 
-            result = new Bitmap(referenceImage);
+            baseColor = Color.FromArgb(0, 255, 0);
+            
+            this.game = game;
 
-            Graphics.FromImage(mask).Clear(Color.Transparent);
+            this.playerType = playerType;
 
-            //referenceImage = new Bitmap(500, 500);
+            heatPoints = new List<ImagePoint>();
 
-            Vector tempVector;
-
-            byte[] referenceBuffer = File.ReadAllBytes(Properties.Settings.Default.DatasPath + "\\GeneralsDatas.bhd");
-
-            worldReference = new Vector(BitConverter.ToSingle(referenceBuffer, 0), BitConverter.ToSingle(referenceBuffer, 4), BitConverter.ToSingle(referenceBuffer, 8));
-
-            worldSize = BitConverter.ToSingle(referenceBuffer, 12);
-
-            Vector worldMin = worldReference.Reduce(worldSize / 2);
-
-            HeatPoint tempPoint;
-
-            byte[] posBuffer = File.ReadAllBytes(path);
-
-            for(int i = 4; i < posBuffer.Length; i += 12)
-            {
-                tempVector = new Vector(BitConverter.ToSingle(posBuffer, i), BitConverter.ToSingle(posBuffer, i + 4), BitConverter.ToSingle(posBuffer, i + 8));
-
-                tempVector -= worldMin;
-
-                tempVector /= worldSize;
-
-                tempVector *= mask.Height;
-
-                tempPoint = new HeatPoint(tempVector.Y, referenceImage.Size.Height - tempVector.X, 255);
-
-                heatPoints.Add(tempPoint);
-            }
+            referenceImage = new Bitmap(Properties.Settings.Default.Path + "\\GeneralsDatas\\" + floor + ".png");
         }
 
-        public void Generate()
+        public void GenerateHeatmap()
         {
-            Graphics canvas = Graphics.FromImage(result);
 
-            //canvas.Clear(Color.White);
+            mask = new Bitmap(referenceImage.Width, referenceImage.Height);
 
             Point minBorder;
 
             Point maxBorder;
 
             Color pixel;
-
-            foreach (HeatPoint point in heatPoints)
+            
+            for (int index = 0; index < heatPoints.Count; index++)
             {
+                minBorder = new Point((int)(heatPoints[index].X - radius), (int)(heatPoints[index].Y - radius));
 
-                minBorder = new Point((int)(point.X - radius), (int)(point.Y - radius));
-
-                maxBorder = new Point((int)(point.X + radius), (int)(point.Y + radius));
+                maxBorder = new Point((int)(heatPoints[index].X + radius), (int)(heatPoints[index].Y + radius));
 
                 for (int i = minBorder.X; i <= maxBorder.X; i++)
                 {
                     for(int j = minBorder.Y; j <= maxBorder.Y; j++)
                     {
-
-                        if (Math.Pow(i - point.X, 2) + Math.Pow(j - point.Y, 2) < radius * radius)
+                        if (Math.Pow(i - heatPoints[index].X, 2) + Math.Pow(j - heatPoints[index].Y, 2) < radius * radius)
                         {
                             pixel = mask.GetPixel(i, j);
 
-                            if(pixel.R == 0 && pixel.G == 0 && pixel.B == 0)
+                            if (pixel.R == 0 && pixel.G == 0 && pixel.B == 0)
                             {
-                                mask.SetPixel(i, j, Color.FromArgb(0, 255, 0));
+                                mask.SetPixel(i, j, baseColor);
                             }
                             else
                             {
-                                if(pixel.R < 255)
+                                if (pixel.R < 255)
                                 {
-                                    mask.SetPixel(i, j, Color.FromArgb(Math.Min(255, pixel.R + 100),  pixel.G, 0));
+                                    mask.SetPixel(i, j, Color.FromArgb(Math.Min(255, pixel.R + 200), pixel.G, 0));
                                 }
                                 else
                                 {
-                                    mask.SetPixel(i, j, Color.FromArgb(pixel.R, Math.Max(0, pixel.G - 100), 0));
+                                    mask.SetPixel(i, j, Color.FromArgb(pixel.R, Math.Max(0, pixel.G - 200), 0));
                                 }
                             }
                         }
                     }
                 }
-
-                canvas.DrawImage(mask, new Rectangle(0, 0, mask.Width, mask.Height));
             }
-
-            Colorize();
-        }
-        
-        public void GenerateSoldier()
-        {
-
         }
     }
 }
