@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>X:\J002\01_PERSO\BLACK_HIVE\Playtest_Datas\HeatmapParser\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -97,14 +97,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CustomCommands.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Heatmap.cs" />
+    <Compile Include="Misc\CustomCommand.cs" />
+    <Compile Include="Misc\Enums.cs" />
+    <Compile Include="Misc\EnumToBoolConverter.cs" />
+    <Compile Include="Misc\ExtensionMethods.cs" />
+    <Compile Include="Model\Game.cs" />
+    <Compile Include="Model\Map.cs" />
+    <Compile Include="ViewModel\GameViewModel.cs" />
+    <Compile Include="Model\Heatmap.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="SoldierTrace.cs" />
-    <Compile Include="Structs.cs" />
-    <Compile Include="Visualizer.xaml.cs">
+    <Compile Include="Model\Trace.cs" />
+    <Compile Include="Misc\Structs.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Visualizer.xaml.cs">
       <DependentUpon>Visualizer.xaml</DependentUpon>
     </Compile>
     <Page Include="Styles\Templates.xaml">
@@ -123,24 +129,24 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PathInput.xaml">
+    <Page Include="View\PathInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PathPicker.xaml">
+    <Page Include="View\PathPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Visualizer.xaml">
+    <Page Include="View\Visualizer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PathInput.xaml.cs">
+    <Compile Include="View\PathInput.xaml.cs">
       <DependentUpon>PathInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PathPicker.xaml.cs">
+    <Compile Include="View\PathPicker.xaml.cs">
       <DependentUpon>PathPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">

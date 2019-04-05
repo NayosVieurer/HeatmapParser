@@ -7,15 +7,16 @@
              mc:Ignorable="d" >
 
     <UserControl.Resources>
-        <ResourceDictionary Source="Styles/Templates.xaml"/>
+        <ResourceDictionary>
+            <self:EnumToBoolConverter x:Key="EBConverter"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/Templates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
-    <UserControl.CommandBindings>
-        <CommandBinding Command="self:CustomCommands.Increase" CanExecute="TraceControls_CanExecute" Executed="Increase_Executed"/>
-        <CommandBinding Command="self:CustomCommands.Decrease" CanExecute="TraceControls_CanExecute" Executed="Decrease_Executed"/>
-    </UserControl.CommandBindings>
 
 
-    <Grid>
+    <Grid DataContext="{Binding selectedGame}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="*"/>
@@ -30,33 +31,33 @@
 
         <Border Grid.Column="1" Grid.RowSpan="3" BorderThickness="3, 0, 0, 0" BorderBrush="#181818"/>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="50" Margin="0,10,0,0" VerticalAlignment="Top" Width="380">
-            <Button Content="Creatures deaths" Background="#282828" Foreground="#F8F8F8" Name="Creatures" Click="Maps_Click" Margin="0, 0, 10, 0" Width="120" Template="{DynamicResource CustomButtonTemplate}"/>
-            <Button Content="Soldier hits" Background="#282828" Foreground="#F8F8F8" Name="SoldierHits" Click="Maps_Click" Margin="0, 0, 10, 0" Width="120" Template="{DynamicResource CustomButtonTemplate}"/>
-            <Button Content="Soldier steps" Background="#282828" Foreground="#F8F8F8"  Name="SoldierSteps" Click="SoldierSteps_Click" HorizontalAlignment="Right" Width="120" Template="{DynamicResource CustomButtonTemplate}"/>
+        <StackPanel Name="MapsButtons" Orientation="Horizontal" HorizontalAlignment="Center" Height="50" Margin="0,10,0,0" VerticalAlignment="Top" Width="380">
+            <RadioButton GroupName="test" IsChecked="{Binding Path=Type, Converter={StaticResource EBConverter}, ConverterParameter={x:Static self:MapType.Creature}}" Style="{StaticResource {x:Type ToggleButton}}" Content="Creatures deaths" Background="#282828" Foreground="#F8F8F8" Name="creaturesDeaths" Margin="0, 0, 10, 0" Width="120"/>
+            <RadioButton GroupName="test" IsChecked="{Binding Path=Type, Converter={StaticResource EBConverter}, ConverterParameter={x:Static self:MapType.Soldier}}" Style="{StaticResource {x:Type ToggleButton}}" Content="Soldier hits" Background="#282828" Foreground="#F8F8F8" Name="SoldierHits" Margin="0, 0, 10, 0" Width="120"/>
+            <RadioButton GroupName="test" IsChecked="{Binding Path=Type, Converter={StaticResource EBConverter}, ConverterParameter={x:Static self:MapType.Steps}}" Style="{StaticResource {x:Type ToggleButton}}" Content="Steps" Background="#282828" Foreground="#F8F8F8"  Name="Steps" HorizontalAlignment="Right" Width="120"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Height="175" Orientation="Vertical" Visibility="Visible">
             <Label Foreground="White" Content="Game" HorizontalAlignment="Center"/>
-            <ComboBox Name="gameSelection" SelectionChanged="GameSelection_SelectionChanged" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" />
+            <ComboBox Name="gameSelection" ItemsSource="{Binding rounds}" IsSynchronizedWithCurrentItem="True" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" />
+            <Label Foreground="White" Content="Floor" HorizontalAlignment="Center"/>
+            <ComboBox Name="floorSelection" ItemsSource="{Binding identifiers}" IsSynchronizedWithCurrentItem="True" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center"/>
 
             <Canvas>
-                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="CreatureControls" Orientation="Vertical" Visibility="Visible">
-                    <Label Foreground="White" Content="Floor" HorizontalAlignment="Center"/>
-                    <ComboBox Name="floorSelection" SelectionChanged="FloorSelection_SelectionChanged" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" />
-                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="MapsControls" Orientation="Vertical" Visibility="Visible">
+                                    </StackPanel>
 
-                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="soldierControls" Orientation="Vertical" Visibility="Hidden">
+                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="StepsControls" Orientation="Vertical" Visibility="Hidden">
 
                     <Label Content="Timeline :" HorizontalAlignment="Center" Foreground="White"/>
                     <Slider ValueChanged="TraceDepthSlider_ValueChanged" Maximum="100" Minimum="0" Name="traceDepthSlider" IsSnapToTickEnabled="True" TickFrequency="1"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" Command="self:CustomCommands.Decrease">
+                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" >
                             <Button.Content>
                                 <Path VerticalAlignment="Center" HorizontalAlignment="Right" Stroke="DarkGray" StrokeThickness="2" Data="M20, 0L -0,7.5 20, 15 "/>
                             </Button.Content>
                         </Button>
-                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" Command="self:CustomCommands.Increase">
+                        <Button Background="Transparent" BorderBrush="Transparent" Width="50">
                             <Button.Content>
                                 <Path VerticalAlignment="Center" HorizontalAlignment="Right" Stroke="DarkGray" StrokeThickness="2" Data="M0, 0L 20,7.5 0, 15 "/>
                             </Button.Content>
@@ -80,7 +81,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Rectangle Name="background" Fill="#656568"/>
-                <Image Name="Display" Height="900" Width="900" Source="Resources/placeholder.png"/>
+                <Image Name="Display" Height="900" Width="900" Source="../Resources/placeholder.png"/>
                 <Image Name="Mask" Height="900" Width="900"/>
             </Grid>
         </ScrollViewer>

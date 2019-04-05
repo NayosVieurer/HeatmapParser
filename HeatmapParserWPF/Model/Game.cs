@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HeatmapParserWPF
+namespace HeatmapParserWPF.Model
 {
-    public enum MapType
+    class Game
     {
-        Steps,
-        Creature,
-        Soldier
+
+
+
     }
 }

@@ -6,25 +6,26 @@
         xmlns:prop="clr-namespace:HeatmapParserWPF.Properties"
         xmlns:self="clr-namespace:HeatmapParserWPF"
         Title="H.I.V.E. Reports"
-        ContentRendered="Window_ContentRendered"
-        Height="{Binding Source={x:Static prop:Settings.Default}, Path=Height, Mode=TwoWay}"
-        Width="{Binding Source={x:Static prop:Settings.Default}, Path=Width, Mode=TwoWay}"
-        Top="{Binding Source={x:Static prop:Settings.Default}, Path=Top, Mode=TwoWay}"
-        Left="{Binding Source={x:Static prop:Settings.Default}, Path=Left, Mode=TwoWay}"
+        ContentRendered="Window_ContentRendered"    
         MinHeight="500"
         MinWidth="750"
         Closing="Window_Closing"
         StateChanged="Window_StateChanged"
         >
     <Window.Resources>
-        <ResourceDictionary Source="Styles/Templates.xaml"/>
+        <ResourceDictionary>
+            <DataTemplate DataType="{x:Type self:GameViewModel}">
+                <TextBlock Height="25" Width="175" TextAlignment="Center" FontSize="15" Foreground="White" FontWeight="Bold" Margin="0, 5, 0, 5" Text="{Binding name}"/>
+            </DataTemplate>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary  Source="Styles/Templates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
+
     <Window.Background>
         <SolidColorBrush Color="#484848"/>
     </Window.Background>
-
-    <Window.CommandBindings>
-    </Window.CommandBindings>
 
     <Grid Name="mainGrid" >
         <Grid.ColumnDefinitions>
@@ -34,22 +35,12 @@
         <Grid.RowDefinitions>
         </Grid.RowDefinitions>
 
-        <self:Visualizer x:Name="test" Grid.ColumnSpan="2"/>
-
-        <Expander Collapsed="Test_Collapsed" Margin="5, 5, 0, 0" Expanded="Test_Expanded" Visibility="Visible"  Name="Expand" Template="{DynamicResource CustomExpanderTemplate}">
-            
+        <Expander Collapsed="Test_Collapsed" Margin="5, 5, 0, 0" Expanded="Test_Expanded" Visibility="Visible" Name="Expand" Template="{DynamicResource CustomExpanderTemplate}">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel Orientation="Vertical" Name="elementList" Opacity="0.75">
-                    <StackPanel.Background>
-                        <LinearGradientBrush>
-                            <LinearGradientBrush.GradientStops>
-                                <GradientStop Color="Gray" Offset="0"/>
-                                <GradientStop Color="LightGray" Offset="1.0"/>
-                            </LinearGradientBrush.GradientStops>
-                        </LinearGradientBrush>
-                    </StackPanel.Background>
-                </StackPanel>
+                <ListBox IsSynchronizedWithCurrentItem="True" Background="#656568" HorizontalContentAlignment="Stretch" ItemsSource="{Binding Games}"/>
             </ScrollViewer>
         </Expander>
+
+        <self:Visualizer x:Name="Visualizer" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
