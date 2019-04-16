@@ -23,11 +23,12 @@
         </ResourceDictionary>
     </Window.Resources>
 
+
     <Window.Background>
         <SolidColorBrush Color="#484848"/>
     </Window.Background>
 
-    <Grid Name="mainGrid" >
+    <Grid Name="mainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="5*"/>
@@ -37,10 +38,10 @@
 
         <Expander Collapsed="Test_Collapsed" Margin="5, 5, 0, 0" Expanded="Test_Expanded" Visibility="Visible" Name="Expand" Template="{DynamicResource CustomExpanderTemplate}">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <ListBox IsSynchronizedWithCurrentItem="True" Background="#656568" HorizontalContentAlignment="Stretch" ItemsSource="{Binding Games}"/>
+                <ListBox Focusable="True" IsSynchronizedWithCurrentItem="True" SelectionChanged="ListBox_SelectionChanged" Background="#656568" HorizontalContentAlignment="Stretch" ItemsSource="{Binding Games}"/>
             </ScrollViewer>
         </Expander>
 
-        <self:Visualizer x:Name="Visualizer" Grid.ColumnSpan="2"/>
+        <self:Visualizer Focusable="True" x:Name="Visualizer" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

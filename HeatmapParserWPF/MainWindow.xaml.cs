@@ -21,16 +21,12 @@ namespace HeatmapParserWPF
     public partial class MainWindow : Window
     {
         bool isMaximised;
-
-        string path = "";
         
         public MainWindow()
         {
             InitializeComponent();
 
             isMaximised = Properties.Settings.Default.Maximized;
-
-           path = Properties.Settings.Default.Path;
 
             this.WindowState = isMaximised ? WindowState.Maximized : WindowState.Normal;
         }
@@ -39,7 +35,7 @@ namespace HeatmapParserWPF
         {
             Properties.Settings.Default.Maximized = isMaximised;
 
-            Properties.Settings.Default.Path = path;
+            Properties.Settings.Default.Path = ((MainWindowViewModel)DataContext).path;
 
             Properties.Settings.Default.Save();
 
@@ -60,7 +56,6 @@ namespace HeatmapParserWPF
             MainWindowViewModel mainViewModel = new MainWindowViewModel();
 
             DataContext = mainViewModel;
-            Visualizer.DataContext = mainViewModel;
 
         }
 
@@ -74,6 +69,12 @@ namespace HeatmapParserWPF
         {
             Grid.SetColumn(Visualizer, 0);
             Grid.SetColumnSpan(Visualizer, 2);
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Visualizer.Focus();
+            Expand.IsExpanded = false;
         }
     }
 }
