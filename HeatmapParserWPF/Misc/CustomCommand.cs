@@ -10,14 +10,27 @@ namespace HeatmapParserWPF
     public class CustomCommand : ICommand
     {
 
-        private Action<object> execute;
+        private Action execute;
 
         private Func<bool> canExecute;
 
-        public event EventHandler CanExecuteChanged;
-
-        public CustomCommand(Action<object> exec, Func<bool> canExec)
+        public event EventHandler CanExecuteChanged
         {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+            }
+
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+            }
+        }
+
+        public CustomCommand(Action exec, Func<bool> canExec)
+        {
+
+
             execute = exec;
 
             canExecute = canExec;
@@ -28,56 +41,10 @@ namespace HeatmapParserWPF
             return canExecute == null ? true : canExecute();
         }
 
-        public void Execute(object parameter = null)
+        public void Execute(object parameter)
         {
             
-            execute(parameter);
+            execute();
         }
-
-
-        //public static readonly RoutedUICommand Exit = new RoutedUICommand
-        //(
-        //    "Exit",
-        //    "Exit",
-        //    typeof(CustomCommands),
-        //    new InputGestureCollection()
-        //    {
-        //        new KeyGesture(Key.F4, ModifierKeys.Alt)
-        //    }
-        //);
-
-        //public static readonly RoutedUICommand CloseVisualizer = new RoutedUICommand
-        //(
-        //    "X",
-        //    "CloseVisualizer",
-        //    typeof(CustomCommands),
-        //    new InputGestureCollection()
-        //    {
-        //        new KeyGesture(Key.Escape)
-        //    }
-        //);
-
-        //public static readonly RoutedUICommand Increase = new RoutedUICommand
-        //(
-        //    "",
-        //    "Increase",
-        //    typeof(CustomCommands),
-        //    new InputGestureCollection()
-        //    {
-        //        new KeyGesture(Key.Right)
-        //    }
-        //);
-
-        //public static readonly RoutedUICommand Decrease = new RoutedUICommand
-        //(
-        //    "",
-        //    "Decrease",
-        //    typeof(CustomCommands),
-        //    new InputGestureCollection()
-        //    {
-        //        new KeyGesture(Key.Left)
-        //    }
-        //);
-
     }
 }

@@ -8,7 +8,6 @@ namespace HeatmapParserWPF
 {
     public enum MapType
     {
-
         Creature,
         Soldier,
         Steps,

@@ -12,17 +12,27 @@ namespace HeatmapParserWPF
 
         public static Vector[] ConvertBytesToVectors(this byte[] arrayToConvert)
         {
-            Vector[] returnArray = new Vector[BitConverter.ToInt32(arrayToConvert, 0)];
+            int arrayLength = BitConverter.ToInt32(arrayToConvert, 0);
 
-            int index = 0;
+            Vector[] returnArray = new Vector[0];
 
-            for(int i = 4; i < arrayToConvert.Length; i += 12)
+            if (arrayLength > 0)
             {
-                returnArray[index] = new Vector(BitConverter.ToSingle(arrayToConvert, i), BitConverter.ToSingle(arrayToConvert, i + 4), BitConverter.ToSingle(arrayToConvert, i + 8));
+                returnArray = new Vector[arrayLength];
 
-                index++;
-            }            
+                byte[] buffer = new byte[arrayLength * 12];
 
+                Array.Copy(arrayToConvert, 4, buffer, 0, arrayLength * 12);
+
+                int index = 0;
+
+                for (int i = 0; i < buffer.Length; i += 12)
+                {
+                    returnArray[index] = new Vector(BitConverter.ToSingle(buffer, i), BitConverter.ToSingle(buffer, i + 4), BitConverter.ToSingle(buffer, i + 8));
+
+                    index++;
+                }
+            }
             return returnArray;
         }
 
@@ -33,49 +43,5 @@ namespace HeatmapParserWPF
             dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
             return dtDateTime;
         }
-
-        public static ImagePoint[] ConvertBytesToImagePoints(this byte[] arrayToConvert, Vector worldReference, float worldSize, Size imageSize)
-        {
-            ImagePoint[] returnArray = new ImagePoint[BitConverter.ToInt32(arrayToConvert, 0)];
-
-            int index = 0;
-
-            Vector tempVector;
-
-            for (int i = 4; i < arrayToConvert.Length; i += 12)
-            {
-
-                tempVector = new Vector(BitConverter.ToSingle(arrayToConvert, i), BitConverter.ToSingle(arrayToConvert, i + 4), BitConverter.ToSingle(arrayToConvert, i + 8));
-
-                tempVector -= worldReference.Reduce(worldSize / 2);
-
-                tempVector /= worldSize;
-
-                tempVector.X *= imageSize.Width;
-
-                tempVector.Y *= imageSize.Height;
-
-                returnArray[index] = new ImagePoint(tempVector.Y, imageSize.Height - tempVector.X);
-                index++;
-            }
-
-            return returnArray;
-        }
-
-        public static ImagePoint ConvertVectorToImagePoint(this Vector vectorToConvert, Vector worldReference, float worldSize, Size imageSize)
-        {
-
-            vectorToConvert -= worldReference.Reduce(worldSize / 2);
-
-            vectorToConvert /= worldSize;
-
-            vectorToConvert.X *= imageSize.Width;
-
-            vectorToConvert.Y *= imageSize.Width;
-
-            return new ImagePoint(vectorToConvert.Y, imageSize.Height - vectorToConvert.X);
-        }
-
-        
     }
 }

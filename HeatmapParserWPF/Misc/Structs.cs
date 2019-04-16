@@ -8,52 +8,6 @@ using System.Threading.Tasks;
 namespace HeatmapParserWPF
 {
 
-    public struct TracePoint
-    {
-        public ImagePoint point;
-
-        public string floor;
-
-        public TracePoint(ImagePoint p, string f)
-        {
-            point = p;
-
-
-            floor = f;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is TracePoint))
-            {
-                return false;
-            }
-
-            var point = (TracePoint)obj;
-            return EqualityComparer<ImagePoint>.Default.Equals(this.point, point.point) &&
-                   floor == point.floor;
-        }
-
-        public override int GetHashCode()
-        {
-            var hashCode = 403149910;
-            hashCode = hashCode * -1521134295 + EqualityComparer<ImagePoint>.Default.GetHashCode(point);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(floor);
-            return hashCode;
-        }
-
-        public static bool operator ==(TracePoint p1, TracePoint p2)
-        {
-
-            return p1.point == p2.point && p1.floor == p2.floor;
-        }
-
-        public static bool operator !=(TracePoint p1, TracePoint p2)
-        {
-            return p1.point != p2.point || p1.floor != p2.floor;
-        }
-    }
-
     public struct Vector
     {
         public float X;
@@ -78,6 +32,28 @@ namespace HeatmapParserWPF
             returnVector.Z = Z - B;
 
             return returnVector;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Vector))
+            {
+                return false;
+            }
+
+            var vector = (Vector)obj;
+            return X == vector.X &&
+                   Y == vector.Y &&
+                   Z == vector.Z;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -307843816;
+            hashCode = hashCode * -1521134295 + X.GetHashCode();
+            hashCode = hashCode * -1521134295 + Y.GetHashCode();
+            hashCode = hashCode * -1521134295 + Z.GetHashCode();
+            return hashCode;
         }
 
         public static Vector operator -(Vector A, Vector B)
@@ -117,6 +93,16 @@ namespace HeatmapParserWPF
             returnVector.Z = A.Z * B;
 
             return returnVector;
+        }
+
+        public static bool operator ==(Vector A, Vector B)
+        {
+            return A.X == B.X && A.Y == B.Y && A.Z == B.Z;
+        }
+
+        public static bool operator !=(Vector A, Vector B)
+        {
+            return A.X != B.X || A.Y != B.Y || A.Z != B.Z;
         }
     };
 
