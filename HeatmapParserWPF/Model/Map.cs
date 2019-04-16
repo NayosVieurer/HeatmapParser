@@ -10,10 +10,9 @@ namespace HeatmapParserWPF
 {
     abstract class Map
     {
+        public List<Vector> points { get; set; }
 
         protected Color baseColor;
-
-        protected List<Vector> points;
 
         protected Vector worldRef;
 
@@ -25,18 +24,18 @@ namespace HeatmapParserWPF
 
         public string identifier { get; set; }
 
-        public MapType type;
+        public MapType type { get; set; }
 
         public Bitmap referenceImage { get; set; }
 
         public Bitmap mask { get; set; }
 
-        public Map(string r, string i, MapType t)
+        public Map(string dPath, string r, string i, MapType t)
         {
 
-            radius = 20;
-
             points = new List<Vector>();
+
+            radius = 20;
 
             round = r;
 

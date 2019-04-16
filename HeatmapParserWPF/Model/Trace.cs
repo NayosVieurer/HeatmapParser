@@ -12,134 +12,168 @@ namespace HeatmapParserWPF
 
     class Trace : Map
     {
+        List<int> deathsIndexes;
 
-        private Dictionary<float, string> floorIntToString;
+        private Dictionary<string, float> floorNameToFloat;
 
         public Dictionary<float, Bitmap> masks { get; set; }
 
         private Dictionary<float, Bitmap> referencesImages;
 
 
-        private string character;
-
-        public Trace(string r, string i, MapType t) : base(r, i, t)
+        public Trace(string dPath, string r, string i, MapType t) : base(dPath, r, i, t)
         {
             #region Basic instanciation
             baseColor = Color.Gray;
 
-            floorIntToString = new Dictionary<float, string>();
+            floorNameToFloat = new Dictionary<string, float>();
 
-            floorIntToString.Add(0, "FirstFloor.png");
-            floorIntToString.Add(1, "SecondFloor.png");
-            floorIntToString.Add(2, "ThirdFloor.png");
-            floorIntToString.Add(3, "FourthFloor.png");
+            floorNameToFloat.Add("FirstFloor.png", 0);
+            floorNameToFloat.Add("SecondFloor.png", 1);
+            floorNameToFloat.Add("ThirdFloor.png", 2);
+            floorNameToFloat.Add("FourthFloor.png", 3);
 
             masks = new Dictionary<float, Bitmap>();
 
             referencesImages = new Dictionary<float, Bitmap>();
 
+            deathsIndexes = new List<int>();
+
+            Bitmap tempImage;
+
+            foreach (string file in Directory.GetFiles(Properties.Settings.Default.Path + "\\GeneralsDatas", "*.png"))
+            {
+                tempImage = new Bitmap(file);
+
+                referencesImages.Add(floorNameToFloat[Path.GetFileName(file)], tempImage);
+
+                masks.Add(floorNameToFloat[Path.GetFileName(file)], new Bitmap(tempImage.Width, tempImage.Height));
+            }
+
             #endregion
 
             Vector tempVector;
 
-            Bitmap tempImage;
+            string path = dPath + "\\" + round + "\\" + type.ToString() + "\\" + identifier + ".bhd";        
 
-            float floor;
+            if(File.Exists(path))
+            {
+                byte[] buffer = File.ReadAllBytes(path);
 
-            //foreach (Vector vector in worldPoints)
-            //{
-            //    tempVector = vector;
+                if (buffer.Length > 0)
+                {
+                    float floor;
 
-            //    floor = tempVector.Z;
+                    int vectorArrayLength = BitConverter.ToInt32(buffer, 0);
 
-            //    tempVector -= worldRef.Reduce(worldSize / 2);
+                    foreach (Vector vector in buffer.ConvertBytesToVectors())
+                    {
 
-            //    tempVector /= worldSize;
+                        tempVector = vector;
 
-            //    if (!referencesImages.ContainsKey(floor))
-            //    {
-            //        tempImage = new Bitmap(Properties.Settings.Default.Path + "\\GeneralsDatas\\" + floorIntToString[floor]);
-            //        referencesImages.Add(floor, tempImage);
-            //        masks.Add(floor, new Bitmap(tempImage.Size.Width, tempImage.Size.Height));
-            //    }
+                        floor = tempVector.Z;
 
-            //    tempVector.X *= referencesImages[floor].Size.Width;
+                        tempVector -= worldRef.Reduce(worldSize / 2);
 
-            //    tempVector.Y *= referencesImages[floor].Size.Height;
+                        tempVector /= worldSize;
 
-            //    tempVector.Z = floor;
+                        tempVector.X *= referencesImages[floor].Size.Height;
 
-            //    points.Add(tempVector);
-            //}
+                        tempVector.Y *= referencesImages[floor].Size.Width;
+
+                        tempVector.Z = floor;
+
+                        tempVector.X = referencesImages[floor].Height - tempVector.X;
+
+                        points.Add(new Vector(tempVector.Y, tempVector.X, floor));
+                    }
+
+                    int startIndex;
+
+                    if (buffer.Length == vectorArrayLength * 12 + 4)
+                    {
+                        deathsIndexes.Add(points.Count - 1);
+                    }
+                    else
+                    {
+                        startIndex = vectorArrayLength * 12 + 8;
+                        for (int k = startIndex; k < buffer.Length; k += 4)
+                        {
+                            deathsIndexes.Add(BitConverter.ToInt32(buffer, k));
+                        }
+                    }
+                }
+
+                referenceImage = points.Count > 0 ? referencesImages[points[0].Z] : referencesImages[0];
+                mask = points.Count > 0 ? masks[points[0].Z] : masks[0];
+            }
+
         }
 
         public void Reset()
         {
 
-            //Bitmap baseImage = referencesImages[points[0].Z];
+            Bitmap baseImage = points.Count > 0 ? referencesImages[points[0].Z] : referencesImages[1];
 
-            //currentImage = new Bitmap(baseImage);
+            referenceImage = new Bitmap(baseImage);
 
-            //Graphics canvas;
+            Graphics canvas;
 
-            //foreach(KeyValuePair<string, Bitmap> mask in masks)
-            //{
-            //    canvas = Graphics.FromImage(mask.Value);
+            foreach (KeyValuePair<float, Bitmap> mask in masks)
+            {
+                canvas = Graphics.FromImage(mask.Value);
 
-            //    canvas.Clear(Color.Transparent);
-            //}
+                canvas.Clear(Color.Transparent);
+            }
 
-            //currentMask = masks[tracePoints[0].floor];
+            mask = points.Count > 0 ? masks[points[0].Z] : masks[1] ;
         }
 
         public void UpdateTrace(int index)
         {
+            Reset();
 
-            //referenceImage = referencesImages[points[0].Z];
+            Color pixelColor;
 
-            //Graphics canvas;
+            Point minBorder;
 
-            //Color pixelColor;
+            Point maxBorder;
 
-            //Point minBorder;
+            for (int i = 0; i < index; i++)
+            {
+                if (i > 0)
+                {
+                    if (points[i].Z != points[i - 1].Z)
+                    {
+                        referenceImage = referencesImages[points[i].Z];
+                        mask = masks[points[i].Z];
+                    }
+                }
 
-            //Point maxBorder;
+                if (deathsIndexes.Contains(i))
+                {
+                    pixelColor = Color.Red;
+                }
+                else
+                {
+                    pixelColor = baseColor;
+                }
 
-            //for(int i = 0; i < index; i++)
-            //{
-            //    if(i > 0)
-            //    {
-            //        if(points[i].Z != points[i - 1].Z)
-            //        {
-            //            referenceImage = referencesImages[points[i].Z];
-            //        }
-            //    }
+                minBorder = new Point((int)points[i].X - radius, (int)points[i].Y - radius);
 
-            //    if(tracePoints[i] == tracePoints[tracePoints.Count - 1])
-            //    {
-            //        baseColor = Color.Red;
-            //    }
+                maxBorder = new Point((int)points[i].X + radius, (int)points[i].Y + radius);
 
-            //    minBorder = new Point((int)tracePoints[i].point.X - radius, (int)tracePoints[i].point.Y - radius);
-
-            //    maxBorder = new Point((int)tracePoints[i].point.X + radius, (int)tracePoints[i].point.Y + radius);
-
-            //    for(int j = minBorder.X; j <= maxBorder.X;j++)
-            //    {
-            //        for(int k = minBorder.Y; k <= maxBorder.Y; k++)
-            //        {
-            //            if(Math.Pow(j - tracePoints[i].point.X, 2) + Math.Pow(k - tracePoints[i].point.Y, 2) < radius * radius)
-            //            {   
-            //                currentMask.SetPixel(j, k, baseColor);
-            //            }
-            //        }
-            //    }
-            //    previousPoint = tracePoints[i];
-            //}
-
-            ////canvas = Graphics.FromImage(currentImage);
-
-            ////canvas.DrawImage(currentMask, new Rectangle(0, 0, currentMask.Width, currentMask.Height));
+                for (int j = minBorder.X; j <= maxBorder.X; j++)
+                {
+                    for (int k = minBorder.Y; k <= maxBorder.Y; k++)
+                    {
+                        if (Math.Pow(j - points[i].X, 2) + Math.Pow(k - points[i].Y, 2) < radius * radius)
+                        {
+                            mask.SetPixel(j, k, pixelColor);
+                        }
+                    }
+                }           
+            }
         }
     }
 }
