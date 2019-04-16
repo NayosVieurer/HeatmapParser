@@ -4,11 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:self="clr-namespace:HeatmapParserWPF"
-             mc:Ignorable="d" >
+             mc:Ignorable="d"
+             Focusable="True"
+             GotFocus="UserControl_GotFocus"
+             DataContext="{Binding selectedGame}"
+            >
 
     <UserControl.Resources>
         <ResourceDictionary>
             <self:EnumToBoolConverter x:Key="EBConverter"/>
+            <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Styles/Templates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -16,7 +21,13 @@
     </UserControl.Resources>
 
 
-    <Grid DataContext="{Binding selectedGame}">
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="Left" Command="{Binding DecreaseCommand}"/>
+        <KeyBinding Gesture="Right" Command="{Binding IncreaseCommand}"/>
+    </UserControl.InputBindings>
+
+
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="*"/>
@@ -32,32 +43,57 @@
         <Border Grid.Column="1" Grid.RowSpan="3" BorderThickness="3, 0, 0, 0" BorderBrush="#181818"/>
 
         <StackPanel Name="MapsButtons" Orientation="Horizontal" HorizontalAlignment="Center" Height="50" Margin="0,10,0,0" VerticalAlignment="Top" Width="380">
-            <RadioButton GroupName="test" IsChecked="{Binding Path=Type, Converter={StaticResource EBConverter}, ConverterParameter={x:Static self:MapType.Creature}}" Style="{StaticResource {x:Type ToggleButton}}" Content="Creatures deaths" Background="#282828" Foreground="#F8F8F8" Name="creaturesDeaths" Margin="0, 0, 10, 0" Width="120"/>
-            <RadioButton GroupName="test" IsChecked="{Binding Path=Type, Converter={StaticResource EBConverter}, ConverterParameter={x:Static self:MapType.Soldier}}" Style="{StaticResource {x:Type ToggleButton}}" Content="Soldier hits" Background="#282828" Foreground="#F8F8F8" Name="SoldierHits" Margin="0, 0, 10, 0" Width="120"/>
-            <RadioButton GroupName="test" IsChecked="{Binding Path=Type, Converter={StaticResource EBConverter}, ConverterParameter={x:Static self:MapType.Steps}}" Style="{StaticResource {x:Type ToggleButton}}" Content="Steps" Background="#282828" Foreground="#F8F8F8"  Name="Steps" HorizontalAlignment="Right" Width="120"/>
+            <RadioButton IsChecked="{Binding Path=Type, Converter={StaticResource EBConverter}, ConverterParameter={x:Static self:MapType.Creature}}" Style="{StaticResource {x:Type ToggleButton}}" Content="Creatures deaths" Background="#282828" Foreground="#F8F8F8" Margin="0, 0, 10, 0" Width="120"/>
+            <RadioButton IsChecked="{Binding Path=Type, Converter={StaticResource EBConverter}, ConverterParameter={x:Static self:MapType.Soldier}}" Style="{StaticResource {x:Type ToggleButton}}" Content="Soldier hits" Background="#282828" Foreground="#F8F8F8" Margin="0, 0, 10, 0" Width="120"/>
+            <RadioButton IsChecked="{Binding Path=Type, Converter={StaticResource EBConverter}, ConverterParameter={x:Static self:MapType.Steps}}" Style="{StaticResource {x:Type ToggleButton}}" Content="Steps" Name="steps" Background="#282828" Foreground="#F8F8F8" HorizontalAlignment="Right" Width="120"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Height="175" Orientation="Vertical" Visibility="Visible">
             <Label Foreground="White" Content="Game" HorizontalAlignment="Center"/>
             <ComboBox Name="gameSelection" ItemsSource="{Binding rounds}" IsSynchronizedWithCurrentItem="True" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center" />
-            <Label Foreground="White" Content="Floor" HorizontalAlignment="Center"/>
-            <ComboBox Name="floorSelection" ItemsSource="{Binding identifiers}" IsSynchronizedWithCurrentItem="True" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-
+            
             <Canvas>
-                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="MapsControls" Orientation="Vertical" Visibility="Visible">
-                                    </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="MapsIdentifieers" Orientation="Vertical">
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="Steps">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <Label Foreground="White" Content="Floor" HorizontalAlignment="Center"/>
+                    <ComboBox GotFocus="ComboBox_GotFocus" ItemsSource="{Binding floors}" IsSynchronizedWithCurrentItem="True" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                </StackPanel>
 
-                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="StepsControls" Orientation="Vertical" Visibility="Hidden">
 
+
+                <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="StepsControls" Orientation="Vertical">
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="Steps">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="200" Name="StepsIdentifiers" Orientation="Vertical" Visibility="{Binding Path=IsChecked, ElementName=steps, Converter={StaticResource VisibleIfTrueConverter}}">
+                        <Label Foreground="White" Content="Character" HorizontalAlignment="Center"/>
+                        <ComboBox ItemsSource="{Binding characters}" IsSynchronizedWithCurrentItem="True" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}, Path=Width}" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                    </StackPanel>
                     <Label Content="Timeline :" HorizontalAlignment="Center" Foreground="White"/>
-                    <Slider ValueChanged="TraceDepthSlider_ValueChanged" Maximum="100" Minimum="0" Name="traceDepthSlider" IsSnapToTickEnabled="True" TickFrequency="1"/>
+                    <Slider Value="{Binding TimelineEnd, Mode=TwoWay}" Maximum="{Binding maxTimeline}" Minimum="0" Name="traceDepthSlider" IsSnapToTickEnabled="True" TickFrequency="1"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" >
+                        <Button Background="Transparent" Command="{Binding DecreaseCommand}" BorderBrush="Transparent" Width="50" >
                             <Button.Content>
                                 <Path VerticalAlignment="Center" HorizontalAlignment="Right" Stroke="DarkGray" StrokeThickness="2" Data="M20, 0L -0,7.5 20, 15 "/>
                             </Button.Content>
                         </Button>
-                        <Button Background="Transparent" BorderBrush="Transparent" Width="50">
+                        <Button Background="Transparent" Command="{Binding IncreaseCommand}" BorderBrush="Transparent" Width="50">
                             <Button.Content>
                                 <Path VerticalAlignment="Center" HorizontalAlignment="Right" Stroke="DarkGray" StrokeThickness="2" Data="M0, 0L 20,7.5 0, 15 "/>
                             </Button.Content>
@@ -81,8 +117,8 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Rectangle Name="background" Fill="#656568"/>
-                <Image Name="Display" Height="900" Width="900" Source="../Resources/placeholder.png"/>
-                <Image Name="Mask" Height="900" Width="900"/>
+                <Image Name="Display" Height="900" Width="900" Source="{Binding currentImage}"/>
+                <Image Name="Mask" Height="900" Width="900" Source="{Binding currentMask}"/>
             </Grid>
         </ScrollViewer>
     </Grid>
