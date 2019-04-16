@@ -13,7 +13,7 @@ namespace HeatmapParserWPF
 {
     class MainWindowViewModel : ViewModelBase
     {
-        string path = "";
+        public string path { get; set; }
 
         public ObservableCollection<GameViewModel> Games { get; }
             
@@ -29,13 +29,16 @@ namespace HeatmapParserWPF
 
         private ObservableCollection<string> floorsList;
 
+        public CustomCommand increaseCommand { get; set; }
+
+        public CustomCommand decreaseCommand { get; set; }
+
         public MainWindowViewModel()
         {
             path = Properties.Settings.Default.Path;
 
             if (!Directory.Exists(path))
             {
-                Console.WriteLine("directory not found");
 
                 PathInput dialog;
 
@@ -49,6 +52,10 @@ namespace HeatmapParserWPF
                     }
                 } while (!Directory.Exists(path));
             }
+
+            increaseCommand = new CustomCommand(() => Increase(), () => CanUpdateTimeline());
+
+            decreaseCommand = new CustomCommand(() => Decrease(), () => CanUpdateTimeline());
 
             floorsList = new ObservableCollection<string>();
 
@@ -82,6 +89,28 @@ namespace HeatmapParserWPF
         private void OnCollectionViewCurrentChanged(object sender, EventArgs e)
         {
             OnPropertyChanged("selectedGame");
+        }
+
+        private bool CanUpdateTimeline()
+        {
+            if(selectedGame == null && selectedGame.CanUpdateTimeline())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void Increase()
+        {
+            Console.WriteLine("Increase");
+            selectedGame.Increase();
+        }
+
+        private void Decrease()
+        {
+            Console.WriteLine("Decrease");
+            selectedGame.Decrease();
         }
     }
 }
